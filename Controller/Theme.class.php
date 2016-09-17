@@ -159,6 +159,22 @@ class Theme extends Base {
 		}, 11 );
 	}
 
+	function remove_meta_boxes( $list_meta_box = array() ) {
+		if ( ! empty( $list_meta_box ) ) {
+			$this->add_attribute( 'removed_meta_boxes', $list_meta_box );
+
+			add_action( 'admin_menu', function () {
+				$meta_boxes = $this->get_attribute( 'removed_meta_boxes' );
+				if ( ! empty( $meta_boxes ) ) {
+					foreach ( $meta_boxes as $item ) {
+						$item['context'] = empty( $item['context'] ) ? 'normal' : $item['context'];
+						remove_meta_box( $item['id'], $item['screen'], $item['context'] );
+					}
+				}
+			}, 11 );
+		}
+	}
+
 	function load_theme_textdomain( $textdomains = array() ) {
 		if ( ! empty( $textdomains ) ) {
 			$this->add_attribute( 'textdomains', $textdomains );
@@ -207,6 +223,7 @@ class Theme extends Base {
 
 	/**
 	 * @deprecated
+	 *
 	 * @param array $nav_menus
 	 */
 	function register_nav_menus( $nav_menus = array() ) {

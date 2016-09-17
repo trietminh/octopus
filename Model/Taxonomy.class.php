@@ -23,8 +23,11 @@ abstract class Taxonomy extends Base {
 
 		if ( $object_or_id instanceof $class ) {    // is this class
 			$_object = $object_or_id;
-		} else {
+		} elseif ( $object_or_id instanceof \WP_Term && ! empty( $object_or_id->term_id ) ) {
 			$_object = new $class( $object_or_id->term_id, $args );
+		} else {
+			$object_or_id = absint( $object_or_id );
+			$_object      = new $class( $object_or_id, $args );
 		}
 
 		if ( ! $_object ) {
@@ -46,8 +49,8 @@ abstract class Taxonomy extends Base {
 			'permalink' => true
 		) );
 
-
 		if ( $object_or_id && ! empty( static::CLASS_NAME ) ) {
+
 			$_term = get_term( $object_or_id, static::CLASS_NAME, $args['output'], $args['filter'] );
 			if ( $_term ) {
 				$vars = get_object_vars( $_term );
@@ -68,6 +71,18 @@ abstract class Taxonomy extends Base {
 
 		// parent
 		parent::__construct( $object_or_id );
+	}
+
+	public function is_root() {
+		return empty( $this->parent );
+	}
+
+	public function get_parent() {
+		if ( ! empty( $this->parent ) ) {
+			return static::get_instance( $this->parent );
+		}
+
+		return false;
 	}
 
 

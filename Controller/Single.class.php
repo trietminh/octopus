@@ -63,4 +63,14 @@ class Single extends Base {
 		return false;
 	}
 
+	public static function get_permalink( $post ) {
+		$permalink = '';
+		if ( ! empty( $post ) && ! empty( $post->post_type ) && ! empty( $post->ID ) && ! empty( $post->post_name ) ) {
+			$post->filter = 'sample';
+			$permalink    = get_permalink( $post );
+		}
+
+		return $permalink;
+	}
+
 }   // EOC

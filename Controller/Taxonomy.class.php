@@ -11,6 +11,7 @@ class Taxonomy extends Base {
 
 	public static function get_top_terms( $args = array(), $cache = true ) {
 		if ( ! empty( static::CLASS_NAME ) ) {
+
 			$args = wp_parse_args( $args, array(
 				'taxonomy'   => static::CLASS_NAME,
 				'permalink'  => true,
@@ -20,13 +21,24 @@ class Taxonomy extends Base {
 				'hide_empty' => false,
 			) );
 
-			$terms = get_terms( $args );
+			if ( $cache ) {
+				$terms = Cache::wp_get( $args );
+				if ( false === $terms ) {
+					$terms = get_terms( $args );
+				}
+			} else {
+				$terms = get_terms( $args );
+			}
 
 			if ( ! empty( $terms ) && $args['permalink'] ) {
 				foreach ( $terms as $k => $item ) {
 					$item->permalink = get_term_link( $item );
 					$terms[ $k ]     = $item;
 				}
+			}
+
+			if ( $cache && $terms !== false ) {
+				Cache::wp_set( $args, $terms );
 			}
 
 			return $terms;
@@ -63,13 +75,24 @@ class Taxonomy extends Base {
 
 			) );
 
-			$terms = get_terms( $args );
+			if ( $cache ) {
+				$terms = Cache::wp_get( $args );
+				if ( false === $terms ) {
+					$terms = get_terms( $args );
+				}
+			} else {
+				$terms = get_terms( $args );
+			}
 
 			if ( ! empty( $terms ) && $args['permalink'] ) {
 				foreach ( $terms as $k => $item ) {
 					$item->permalink = get_term_link( $item );
 					$terms[ $k ]     = $item;
 				}
+			}
+
+			if ( $cache && $terms !== false ) {
+				Cache::wp_set( $args, $terms );
 			}
 
 			return $terms;

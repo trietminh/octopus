@@ -43,27 +43,3 @@ function otp_get_current_url() {
 	// return
 	return $url;
 }
-
-/**
- * @todo move this function to Page controller
- *
- * @param $name
- *
- * @return bool|mixed
- */
-function otp_get_page_by_template( $name ) {
-	$pages = get_pages( array(
-		'meta_key'     => '_wp_page_template',
-		'meta_value'   => $name,
-		'hierarchical' => 0
-	) );
-	if ( ! empty( $pages ) ) {
-		$page            = reset( $pages );
-		$page->permalink = sb_get_permalink( $page );
-
-		return $page;
-	} else {
-		return false;
-	}
-}
-

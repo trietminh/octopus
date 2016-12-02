@@ -43,3 +43,14 @@ function otp_get_current_url() {
 	// return
 	return $url;
 }
+
+
+function otp_get_fields( $field_key, $post_id = false, $format_value = true ) {
+	if ( function_exists( 'get_field' ) ) {
+		$result = get_field( $field_key, $post_id, $format_value );
+
+		return $result;
+	} else {
+		return '';
+	}
+}

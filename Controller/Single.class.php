@@ -73,4 +73,17 @@ class Single extends Base {
 		return $permalink;
 	}
 
+	public static function get_post_type_object() {
+		return get_post_type_object( static::CLASS_NAME );
+	}
+
+	public static function get_rewrite_slug() {
+		$post_type_object = static::get_post_type_object();
+		if ( ! empty( $post_type_object->rewrite['slug'] ) ) {
+			return $post_type_object->rewrite['slug'];
+		}
+
+		return false;
+	}
+
 }   // EOC

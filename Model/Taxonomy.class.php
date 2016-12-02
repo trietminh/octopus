@@ -63,7 +63,11 @@ abstract class Taxonomy extends Base {
 
 				// Add Permalink
 				if ( $args['permalink'] ) {
-					$this->permalink = get_term_link( $_term );
+					if ( ! empty( $_term->permalink ) ) {
+						$this->permalink = $_term->permalink;
+					} else {
+						$this->permalink = get_term_link( $_term );
+					}
 				}
 
 			}

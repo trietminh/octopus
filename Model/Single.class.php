@@ -201,7 +201,7 @@ abstract class Single extends Base {
 
 			if ( ! empty( $url ) ) {
 				$alt = empty( $alt ) ?
-					"alt='{$this->obj_image->metadata->alt}'" : $alt;
+					"alt='{$this->obj_image->metadata->alt}'" : "alt='$alt'";
 
 				$others = '';
 				if ( ! empty( $attr ) ) {

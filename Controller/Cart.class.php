@@ -19,6 +19,20 @@ class Cart extends Base {
 		return array();
 	}
 
+	public static function get_object_key( $object_id ) {
+		$object_id = intval( $object_id );
+		$cart      = self::get_cart();
+		if ( ! empty( $cart ) ) {
+			foreach ( $cart as $k => $row ) {
+				if ( $object_id == $row['id'] ) {
+					return $k;
+				}
+			}
+		}
+
+		return false;
+	}
+
 	public static function add_to_cart( $object_id, $quantity = 1 ) {
 
 		$object_id = absint( $object_id );
@@ -32,10 +46,12 @@ class Cart extends Base {
 			$_SESSION['otp_cart'] = array();
 		}
 
-		if ( array_key_exists( $object_id, $_SESSION['otp_cart'] ) ) {  // the product has item
-			$_SESSION['otp_cart'][ $object_id ] += $quantity;
+		$object_key = self::get_object_key( $object_id );
+
+		if ( $object_key !== false ) {  // the product has item
+			$_SESSION['otp_cart'][ $object_key ]['quantity'] += $quantity;
 		} else {
-			$_SESSION['otp_cart'][ $object_id ] = $quantity;
+			array_push( $_SESSION['otp_cart'], array( 'id' => $object_id, 'quantity' => $quantity ) );
 		}
 		static::validate_cart();
 
@@ -44,14 +60,16 @@ class Cart extends Base {
 
 	public static function validate_cart() {
 		if ( isset( $_SESSION['otp_cart'] ) ) {
-			foreach ( $_SESSION['otp_cart'] as $k => $quantity ) {
-				if ( $quantity <= 0 ) {
+			foreach ( $_SESSION['otp_cart'] as $k => $item ) {
+				if ( $item['quantity'] <= 0 ) {
 					unset( $_SESSION['otp_cart'][ $k ] );
 				}
 			}
 
 			if ( empty( $_SESSION['otp_cart'] ) ) {
 				unset( $_SESSION['otp_cart'] );
+			} else {
+				$_SESSION['otp_cart'] = array_values( $_SESSION['otp_cart'] );
 			}
 		}
 	}
@@ -67,11 +85,13 @@ class Cart extends Base {
 			return false;
 		}
 
-		if ( array_key_exists( $object_id, $_SESSION['otp_cart'] ) ) {  // the product has item
+		$object_key = self::get_object_key( $object_id );
+
+		if ( $object_key !== false ) {  // the product has item
 			$quantity = absint( $quantity );
 			$quantity = ( $quantity <= 0 ) ? 1 : $quantity;
 
-			$_SESSION['otp_cart'][ $object_id ] = $quantity;
+			$_SESSION['otp_cart'][ $object_key ]['quantity'] = $quantity;
 			static::validate_cart();
 
 			return true;
@@ -85,8 +105,10 @@ class Cart extends Base {
 			return false;
 		}
 
-		if ( array_key_exists( $object_id, $_SESSION['otp_cart'] ) ) {  // the product has item
-			unset( $_SESSION['otp_cart'][ $object_id ] );
+		$object_key = self::get_object_key( $object_id );
+
+		if ( $object_key !== false ) {  // the product has item
+			unset( $_SESSION['otp_cart'][ $object_key ] );
 			static::validate_cart();
 
 			return true;

@@ -77,7 +77,11 @@ class Cart extends Base {
 	public static function destroy_cart() {
 		if ( isset( $_SESSION['otp_cart'] ) ) {
 			unset( $_SESSION['otp_cart'] );
+
+			return true;
 		}
+
+		return false;
 	}
 
 	public static function modify_item( $object_id, $quantity ) {

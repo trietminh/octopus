@@ -54,3 +54,40 @@ function otp_get_fields( $field_key, $post_id = false, $format_value = true ) {
 		return '';
 	}
 }
+
+function otp_sanitize_paragraph( $paragraph ) {
+	$paragraph = stripslashes_deep( $paragraph );
+	$paragraph = balanceTags( wp_kses_post( $paragraph ), true );
+
+	return $paragraph;
+}
+
+function otp_sanitize_textarea( $paragraph ) {
+	$paragraph = stripslashes_deep( $paragraph );
+
+	return $paragraph;
+}
+
+function otp_sanitize_text( $text ) {
+	$text = stripslashes_deep( $text );
+
+	return sanitize_text_field( $text );
+}
+
+function otp_escape_paragraph( $paragraph ) {
+	return balanceTags( wp_kses_post( $paragraph ), true );
+}
+
+function otp_escape_textarea( $paragraph ) {
+	return esc_textarea( $paragraph );
+}
+
+function otp_is_array_full_value( $array ) {
+	foreach ( $array as $key => $value ) {
+		if ( empty( $value ) ) {
+			return false;
+		}
+	}
+
+	return true;
+}

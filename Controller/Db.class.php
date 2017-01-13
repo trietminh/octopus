@@ -15,7 +15,7 @@ class Db extends Base {
 		}
 	}
 
-	public static function _parse_job_orderby( $orderby, $allowed_keys = array() ) {
+	public static function _parse_orderby_clause( $orderby, $allowed_keys = array() ) {
 
 		if ( $orderby == 'rand' ) {
 			$orderby_clause = 'RAND()';

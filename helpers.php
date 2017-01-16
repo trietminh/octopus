@@ -91,3 +91,9 @@ function otp_is_array_full_value( $array ) {
 
 	return true;
 }
+
+function otp_get_youtube_id( $url ) {
+	preg_match( "/^(?:http(?:s)?:\/\/)?(?:www\.)?(?:m\.)?(?:youtu\.be\/|youtube\.com\/(?:(?:watch)?\?(?:.*&)?v(?:i)?=|(?:embed|v|vi|user)\/))([^\?&\"'>]+)/", $url, $matches );
+
+	return $matches[1];
+}

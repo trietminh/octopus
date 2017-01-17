@@ -41,7 +41,7 @@ class Email extends Base {
 
 
 		$headers = 'MIME-Version: 1.0' . "\r\n";
-		$headers .= 'Content-type: text/html; charset=utf8' . "\r\n";
+		$headers .= "Content-type: text/html; charset=UTF-8\r\nContent-Transfer-Encoding: 8bit\r\n";
 		$headers .= "From: {$args['sender']} <{$args['from']}>" . "\r\n" .
 		            "Reply-To: {$args['sender']} <{$args['from']}>" . "\r\n";
 

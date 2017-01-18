@@ -207,6 +207,7 @@ abstract class Single extends Base {
 				if ( ! empty( $attr ) ) {
 					foreach ( $attr as $k => $val ) {
 						$val = str_replace( '%url%', $url, $val );
+						$val = str_replace( '%url-full%', $this->obj_image->url, $val );
 						$others .= " $k='$val'";
 					}
 				}
@@ -259,5 +260,18 @@ abstract class Single extends Base {
 
 
 		return $terms;
+	}
+
+	public function get_publish_date( $date_format = '' ) {
+		if ( empty( $this->ID ) ) {
+			return '';
+		}
+
+		if ( empty( $date_format ) ) {
+			$date_format = get_option( 'date_format' );
+		}
+		$date = new \DateTime( $this->post_date );
+
+		return $date->format( $date_format );
 	}
 }

@@ -27,8 +27,11 @@ abstract class Single extends Base {
 
 		if ( $object_or_id instanceof $class ) {    // is this class
 			$_object = $object_or_id;
-		} else {
+		} elseif ( is_object( $object_or_id ) && ! empty( $object_or_id->ID ) ) {
 			$_object = new $class( $object_or_id->ID, $field_names, $post_args );
+		} else {
+			$object_or_id = intval( $object_or_id );
+			$_object      = new $class( $object_or_id, $field_names, $post_args );
 		}
 
 		if ( ! $_object ) {

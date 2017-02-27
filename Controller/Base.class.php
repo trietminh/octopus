@@ -14,7 +14,7 @@ class Base {
 	}
 
 	/**
-	 * @return Cache|Cart|CustomPostType|CustomTaxonomy|Db|Development|Email|Image|Menu|Notice|Page|Post|Script|Sidebar|Single|Taxonomy|Theme
+	 * @return Cache|Cart|Cart2|CustomPostType|CustomTaxonomy|Db|Development|Email|Image|Menu|Notice|Page|Post|Script|Sidebar|Single|Taxonomy|Theme
 	 */
 	final public static function get_instance() {
 		$class = get_called_class();

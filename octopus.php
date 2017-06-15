@@ -4,7 +4,7 @@ Plugin Name: Octopus Framework
 Plugin URI: http://webviet.org/
 Description: Octopus Framework - The framework for Octopus theme.
 Author: Webviet
-Version: 1.0.0
+Version: 1.0.1
 Author URI: http://webviet.org/
 Text Domain: octopus
 Domain Path: /languages/

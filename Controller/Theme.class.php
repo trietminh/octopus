@@ -129,6 +129,13 @@ class Theme extends Base {
 		} );
 	}
 
+	function remove_wp_logo() {
+		add_action( 'wp_before_admin_bar_render', function () {
+			global $wp_admin_bar;
+			$wp_admin_bar->remove_menu( 'wp-logo' );
+		} );
+	}
+
 	function remove_default_widgets( $list_widgets = array() ) {
 		if ( ! empty( $list_widgets ) ) {
 			$this->add_attribute( 'removed_widgets', $list_widgets );

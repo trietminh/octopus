@@ -1,7 +1,7 @@
 <?php
 namespace Octopus\Model;
 
-class Page extends Single {
+abstract class AbsPage extends Single {
 	const CLASS_NAME = 'page';
 
 	protected function init() {

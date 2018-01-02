@@ -1,7 +1,7 @@
 <?php
 namespace Octopus\Controller;
 
-class Post extends Single {
+abstract class AbsPost extends Single {
 
 	const CLASS_NAME = 'post';
 

@@ -1,4 +1,5 @@
 <?php
+
 namespace Octopus\Controller;
 
 use Octopus\Main;
@@ -51,6 +52,40 @@ class Single extends Base {
 						$result[] = $class_name::get_instance( $item, $field_names, $post_args );
 					} else {
 						$result[] = Model\Post::get_instance( $item, $field_names, $post_args );
+					}
+				}
+			} else {
+				$result = false;
+			}
+
+			return $result;
+		}
+
+		return false;
+	}
+
+	public static function wp_query_posts( $args = array(), $field_names = array(), $post_args = array(), $cache = false ) {
+		if ( ! empty( static::CLASS_NAME ) && post_type_exists( static::CLASS_NAME ) ) {
+			$args['post_type'] = static::CLASS_NAME;
+
+			$wp_posts = new \WP_Query( $args );
+			if ( ! empty( $wp_posts->posts ) ) {
+				$result = [
+					'posts'    => [],
+					'wp_query' => $wp_posts,
+					'info'     => [
+						'post_count'    => $wp_posts->post_count,
+						'current_post'  => $wp_posts->current_post,
+						'found_posts'   => $wp_posts->found_posts,
+						'max_num_pages' => $wp_posts->max_num_pages,
+					]
+				];
+				foreach ( $wp_posts->posts as $item ) {
+					$class_name = "Octopus\\Model\\" . ucfirst( strtolower( static::CLASS_NAME ) );
+					if ( Main::is_custom_class_file_exist( $class_name ) ) {
+						$result['posts'][] = $class_name::get_instance( $item, $field_names, $post_args );
+					} else {
+						$result['posts'][] = Model\Post::get_instance( $item, $field_names, $post_args );
 					}
 				}
 			} else {

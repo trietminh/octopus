@@ -87,7 +87,9 @@ class Theme extends Base {
 	}
 
 	function set_default_editor() {
-		add_filter( 'wp_default_editor', create_function( '', 'return "tinymce";' ) );
+		add_filter( 'wp_default_editor', function () {
+			return 'tinymce';
+		} );
 	}
 
 	function remove_wp_generator() {

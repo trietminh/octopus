@@ -219,25 +219,25 @@ abstract class SingleModel {
 
 	public function get_image_tag( $size_name = '', $alt = '', $attr = array() ) {
 		$html = "";
-		if ( ! empty( $this->obj_image ) && $this->obj_image instanceof ImageModel ) {
+		if ( ! empty( $this->featured_image ) && $this->featured_image instanceof ImageModel ) {
 
-			if ( ! empty( $size_name ) && ! empty( $this->obj_image->sizes->{$size_name} ) ) {
-				$url = $this->obj_image->sizes->{$size_name};
-			} elseif ( ! empty( $this->obj_image->url ) ) {
-				$url = $this->obj_image->url;
+			if ( ! empty( $size_name ) && ! empty( $this->featured_image->sizes->{$size_name} ) ) {
+				$url = $this->featured_image->sizes->{$size_name};
+			} elseif ( ! empty( $this->featured_image->url ) ) {
+				$url = $this->featured_image->url;
 			} else {
 				$url = '';
 			}
 
 			if ( ! empty( $url ) ) {
 				$alt = empty( $alt ) ?
-					"alt='{$this->obj_image->metadata->alt}'" : "alt='$alt'";
+					"alt='{$this->featured_image->metadata->alt}'" : "alt='$alt'";
 
 				$others = '';
 				if ( ! empty( $attr ) ) {
 					foreach ( $attr as $k => $val ) {
 						$val    = str_replace( '%url%', $url, $val );
-						$val    = str_replace( '%url-full%', $this->obj_image->url, $val );
+						$val    = str_replace( '%url-full%', $this->featured_image->url, $val );
 						$others .= " $k='$val'";
 					}
 				}

@@ -1,99 +1,55 @@
 <?php
 
-function otp_get_setting( $name, $allow_filter = true ) {
-	// vars
-	$r = null;
+namespace Octopus;
 
-	// load from bpp if available
-	if ( isset( Octopus\Main::$settings[ $name ] ) ) {
-		$r = Octopus\Main::$settings[ $name ];
-	}
+class Helpers {
 
-	// filter for 3rd party customization
-	if ( $allow_filter ) {
-		$r = apply_filters( "octopus/settings/{$name}", $r );
-	}
-
-	// return
-	return $r;
-}
-
-
-function otp_get_current_url() {
-
-	// vars
-	$home = home_url();
-	$url  = home_url( $_SERVER['REQUEST_URI'] );
-
-	// explode url (4th bit is the sub folder)
-	$bits = explode( '/', $home, 4 );
-
-	// handle sub folder
-	if ( ! empty( $bits[3] ) ) {
-
-		$find   = '/' . $bits[3];
-		$pos    = strpos( $url, $find );
-		$length = strlen( $find );
-
-		if ( $pos !== false ) {
-			$url = substr_replace( $url, '', $pos, $length );
+	public static function get_post_permalink( $post ) {
+		$permalink = '';
+		if ( ! empty( $post ) && ! empty( $post->post_type ) && ! empty( $post->ID ) && ! empty( $post->post_name ) ) {
+			$post->filter = 'sample';
+			$permalink    = get_permalink( $post );
 		}
+
+		return $permalink;
 	}
 
-	// return
-	return $url;
-}
+	public static function locate_theme_file( $file, $is_url = true ) {
+
+		$theme_url        = get_template_directory_uri();
+		$theme_path       = get_template_directory();
+		$child_theme_url  = get_stylesheet_directory_uri();
+		$child_theme_path = get_stylesheet_directory();
 
 
-function otp_get_fields( $field_key, $post_id = false, $format_value = true ) {
-	if ( function_exists( 'get_field' ) ) {
-		$result = get_field( $field_key, $post_id, $format_value );
-
-		return $result;
-	} else {
-		return '';
-	}
-}
-
-function otp_sanitize_paragraph( $paragraph ) {
-	$paragraph = stripslashes_deep( $paragraph );
-	$paragraph = balanceTags( wp_kses_post( $paragraph ), true );
-
-	return $paragraph;
-}
-
-function otp_sanitize_textarea( $paragraph ) {
-	$paragraph = stripslashes_deep( $paragraph );
-
-	return $paragraph;
-}
-
-function otp_sanitize_text( $text ) {
-	$text = stripslashes_deep( $text );
-
-	return sanitize_text_field( $text );
-}
-
-function otp_escape_paragraph( $paragraph ) {
-	return balanceTags( wp_kses_post( $paragraph ), true );
-}
-
-function otp_escape_textarea( $paragraph ) {
-	return esc_textarea( $paragraph );
-}
-
-function otp_is_array_full_value( $array ) {
-	foreach ( $array as $key => $value ) {
-		if ( empty( $value ) ) {
+		if ( empty( $file ) ) {
 			return false;
 		}
+
+		if ( $file[0] == '/' || $file[0] == '\\' ) {
+			$file = substr( $file, 1 );
+		}
+
+		$file_paths = array(
+			$child_theme_path . '/' . $file,
+			$theme_path . DIRECTORY_SEPARATOR . $file
+		);
+		$file_urls  = array(
+			$child_theme_url . '/' . $file,
+			$theme_url . '/' . $file
+		);
+
+		foreach ( $file_paths as $k => $path ) {
+			if ( file_exists( $path ) ) {
+				if ( $is_url ) {
+					return $file_urls[ $k ];
+				} else {
+					return $path;
+				}
+			}
+		}
+
+		return false;
 	}
 
-	return true;
-}
-
-function otp_get_youtube_id( $url ) {
-	preg_match( "/^(?:http(?:s)?:\/\/)?(?:www\.)?(?:m\.)?(?:youtu\.be\/|youtube\.com\/(?:(?:watch)?\?(?:.*&)?v(?:i)?=|(?:embed|v|vi|user)\/))([^\?&\"'>]+)/", $url, $matches );
-
-	return $matches[1];
 }

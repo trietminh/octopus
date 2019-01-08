@@ -115,7 +115,10 @@ abstract class SingleModel {
 
 			// Add Permalink
 			if ( $post_args['permalink'] ) {
-				$this->permalink = get_permalink( $_post );
+				$this->permalink  = get_permalink( $_post );
+				$this->link_title = $this->get_title_with_link( $this->permalink );
+			} else {
+				$this->link_title = $this->get_title_with_link();
 			}
 
 			// Get Featured Image
@@ -305,5 +308,15 @@ abstract class SingleModel {
 		$date = new \DateTime( $this->post_date );
 
 		return $date->format( $date_format );
+	}
+
+	public function get_title_with_link( $permalink = '#' ) {
+		$link = sprintf( '<a href="%s" title="%s">%s</a>',
+			$permalink,
+			$this->esc_title,
+			$this->post_title
+		);
+
+		return $link;
 	}
 }

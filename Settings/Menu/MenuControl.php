@@ -35,6 +35,8 @@ class MenuControl extends Base {
 				register_nav_menus( $this->nav_menus );
 			}
 		} );
+
+		return $this;
 	}
 
 	static function show_menu( $args = array() ) {
@@ -80,6 +82,21 @@ class MenuControl extends Base {
 		$menu_obj = get_term( $locations[ $location ], 'nav_menu' );
 
 		return $menu_obj;
+	}
+
+	function change_sub_menu_class( $parent_class = '', $submenu_class = '' ) {
+		add_filter( 'wp_nav_menu', function ( $menu ) use ( $parent_class, $submenu_class ) {
+			if ( ! empty( $parent_class ) ) {
+				$menu = preg_replace( '/menu-item-has-children/', $parent_class, $menu );
+			}
+			if ( ! empty( $submenu_class ) ) {
+				$menu = preg_replace( '/ class="sub-menu"/', ' class="' . $submenu_class . '"', $menu );
+			}
+
+			return $menu;
+		} );
+
+		return $this;
 	}
 
 }   // EOC

@@ -2,7 +2,7 @@
 
 namespace Octopus;
 
-class Helpers {
+class Helper {
 
 	public static function get_post_permalink( $post ) {
 		$permalink = '';

@@ -4,7 +4,7 @@ namespace Octopus\Settings\Cache;
 
 use Octopus\Base;
 
-class CacheControl extends Base {
+class CacheService extends Base {
 
 	public static function transient_set( $key, $data, $expiration = 0 ) {
 		$key = self::sanitize_cache_key( $key );

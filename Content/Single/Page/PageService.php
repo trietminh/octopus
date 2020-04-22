@@ -2,11 +2,11 @@
 
 namespace Octopus\Content\Single\Page;
 
-use Octopus\Content\Single\SingleControl;
-use Octopus\Settings\Cache\CacheControl;
+use Octopus\Content\Single\SingleService;
+use Octopus\Settings\Cache\CacheService;
 use Octopus\Helpers;
 
-class PageControl extends SingleControl {
+class PageService extends SingleService {
 	const CLASS_NAME = 'page';
 
 	function init() {
@@ -28,7 +28,7 @@ class PageControl extends SingleControl {
 		);
 
 		if ( $cache ) {
-			$page = CacheControl::wp_get( $args );
+			$page = CacheService::wp_get( $args );
 
 			if ( false === $page ) {
 				$pages = get_pages( $args );
@@ -45,7 +45,7 @@ class PageControl extends SingleControl {
 			$page->permalink = Helpers::get_post_permalink( $page );
 
 			if ( $cache && $page !== false ) {
-				CacheControl::wp_set( $args, $page );
+				CacheService::wp_set( $args, $page );
 			}
 
 			return $page;

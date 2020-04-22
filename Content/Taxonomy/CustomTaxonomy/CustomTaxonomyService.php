@@ -2,9 +2,9 @@
 
 namespace Octopus\Content\Taxonomy\CustomTaxonomy;
 
-use Octopus\Content\Taxonomy\TaxonomyControl;
+use Octopus\Content\Taxonomy\TaxonomyService;
 
-class CustomTaxonomyControl extends TaxonomyControl {
+class CustomTaxonomyService extends TaxonomyService {
 
 	protected $labels = array();
 	protected $settings = array();

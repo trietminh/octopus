@@ -3,9 +3,9 @@
 namespace Octopus\Content\Taxonomy;
 
 use Octopus\Base;
-use Octopus\Settings\Cache\CacheControl;
+use Octopus\Settings\Cache\CacheService;
 
-abstract class TaxonomyControl extends Base {
+abstract class TaxonomyService extends Base {
 	const CLASS_NAME = '';
 	protected static $display_name;
 	protected static $display_singular_name;
@@ -30,7 +30,7 @@ abstract class TaxonomyControl extends Base {
 			) );
 
 			if ( $cache ) {
-				$terms = CacheControl::wp_get( $args );
+				$terms = CacheService::wp_get( $args );
 				if ( false === $terms ) {
 					$terms = get_terms( $args );
 				}
@@ -46,7 +46,7 @@ abstract class TaxonomyControl extends Base {
 			}
 
 			if ( $cache && $terms !== false ) {
-				CacheControl::wp_set( $args, $terms );
+				CacheService::wp_set( $args, $terms );
 			}
 
 			return $terms;
@@ -84,7 +84,7 @@ abstract class TaxonomyControl extends Base {
 			) );
 
 			if ( $cache ) {
-				$terms = CacheControl::wp_get( $args );
+				$terms = CacheService::wp_get( $args );
 				if ( false === $terms ) {
 					$terms = get_terms( $args );
 				}
@@ -100,7 +100,7 @@ abstract class TaxonomyControl extends Base {
 			}
 
 			if ( $cache && $terms !== false ) {
-				CacheControl::wp_set( $args, $terms );
+				CacheService::wp_set( $args, $terms );
 			}
 
 			return $terms;

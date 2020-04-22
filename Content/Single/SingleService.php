@@ -4,7 +4,7 @@ namespace Octopus\Content\Single;
 
 use Octopus\Base;
 
-abstract class SingleControl extends Base {
+abstract class SingleService extends Base {
 
 	const CLASS_NAME = '';
 

@@ -2,9 +2,9 @@
 
 namespace Octopus\Content\Single\CustomPostType;
 
-use Octopus\Content\Single\SingleControl;
+use Octopus\Content\Single\SingleService;
 
-abstract class CustomPostTypeControl extends SingleControl {
+abstract class CustomPostTypeService extends SingleService {
 
 	protected $labels = array();
 	protected $settings = array();

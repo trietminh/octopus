@@ -2,9 +2,9 @@
 
 namespace Octopus\Content\Taxonomy\Category;
 
-use Octopus\Content\Taxonomy\TaxonomyControl;
+use Octopus\Content\Taxonomy\TaxonomyService;
 
-class CategoryControl extends TaxonomyControl {
+class CategoryService extends TaxonomyService {
 
 	const CLASS_NAME = 'category';
 

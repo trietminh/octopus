@@ -4,12 +4,20 @@ namespace Octopus\Settings\Menu;
 
 use Octopus\Base;
 
-class MenuControl extends Base {
+class MenuService extends Base {
 
 	public $nav_menus = array();
 
+	function init() {
+		// add class to <li>
+		add_filter( 'nav_menu_css_class', array( $this, 'add_li_class' ), 1, 3 );
+
+		// add class to <a>
+		add_filter( 'nav_menu_link_attributes', array( $this, 'add_link_class' ), 1, 3 );
+	}
+
 	/**
-	 * @param array $locations An associative array of menu location slugs (key) and descriptions (according value)*
+	 * @param  array  $locations  An associative array of menu location slugs (key) and descriptions (according value)*
 	 *
 	 * @return $this
 	 */
@@ -97,6 +105,22 @@ class MenuControl extends Base {
 		} );
 
 		return $this;
+	}
+
+	function add_li_class( $classes, $item, $args ) {
+		if ( isset( $args->li_class ) ) {
+			$classes[] = $args->li_class;
+		}
+
+		return $classes;
+	}
+
+	function add_link_class( $atts, $item, $args ) {
+		if ( isset( $args->link_class ) ) {
+			$atts['class'] = $args->link_class;
+		}
+
+		return $atts;
 	}
 
 }   // EOC

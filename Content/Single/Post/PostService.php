@@ -2,9 +2,9 @@
 
 namespace Octopus\Content\Single\Post;
 
-use Octopus\Content\Single\SingleControl;
+use Octopus\Content\Single\SingleService;
 
-class PostControl extends SingleControl {
+class PostService extends SingleService {
 	const CLASS_NAME = 'post';
 
 	function init() {

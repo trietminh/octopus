@@ -4,7 +4,7 @@ namespace Octopus\Content\Image;
 
 use Octopus\Base;
 
-class ImageControl extends Base {
+class ImageService extends Base {
 	/**
 	 * Thumbnail size, the key is: post-thumbnail
 	 *

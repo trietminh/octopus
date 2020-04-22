@@ -4,7 +4,7 @@ namespace Octopus\Content\Comment;
 
 use Octopus\Base;
 
-class CommentControl extends Base {
+class CommentService extends Base {
 
 	function init() {
 	}
@@ -63,5 +63,20 @@ class CommentControl extends Base {
 		add_action( 'admin_bar_menu', function ( $wp_admin_bar ) {
 			$wp_admin_bar->remove_node( 'comments' );
 		}, 999 );
+
+		// disable feed
+		add_action( 'do_feed_rss2', function ( $is_comment_feed ) {
+			if ( $is_comment_feed ) {
+				wp_redirect( '/' );
+			}
+		}, 1 );
+		add_action( 'do_feed_atom_comments', function ( $is_comment_feed ) {
+			if ( $is_comment_feed ) {
+				wp_redirect( '/' );
+			}
+		}, 1 );
+
 	}
+
+
 }

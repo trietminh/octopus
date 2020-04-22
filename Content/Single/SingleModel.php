@@ -17,8 +17,8 @@ abstract class SingleModel {
 	 * Get instance of the Model
 	 *
 	 * @param $object_id_slug mixed Can be Object, ID or slug
-	 * @param bool $field_names
-	 * @param array $post_args
+	 * @param  bool  $field_names
+	 * @param  array  $post_args
 	 *
 	 * @return static|bool|null|string
 	 */
@@ -98,7 +98,8 @@ abstract class SingleModel {
 
 			// Get Fields
 			$this->field_names = ( isset( $this->field_names ) ? $this->field_names : array() );
-			$this->field_names = ( $custom_fields ? array_merge( $this->field_names, $custom_fields ) : $this->field_names );
+			$this->field_names = ( $custom_fields ? array_merge( $this->field_names,
+				$custom_fields ) : $this->field_names );
 			$this->field_names = array_merge( $this->field_names, $this->required_fields );
 
 			if ( isset( $this->field_names ) ) {
@@ -108,7 +109,8 @@ abstract class SingleModel {
 			// Apply Filters
 			$this->display_content = apply_filters( 'the_content', $this->post_content );
 
-			$this->display_excerpt = $this->get_excerpt( $this->post_excerpt, $this->post_content, $post_args['number_excerpt'] );
+			$this->display_excerpt = $this->get_excerpt( $this->post_excerpt, $this->post_content,
+				$post_args['number_excerpt'] );
 
 			// Get HTML Title
 			$this->esc_title = esc_attr( $this->post_title );
@@ -123,8 +125,8 @@ abstract class SingleModel {
 
 			// Get Featured Image
 			if ( $post_args['image'] ) {
-				$this->featured_image = new ImageModel( $this->ID, false, ( isset( $this->image_size ) ) ? $this->image_size : false );
-
+				$this->featured_image = new ImageModel( $this->ID, false,
+					( isset( $this->image_size ) ) ? $this->image_size : false );
 			}
 
 			// Get adjacent posts
@@ -162,7 +164,7 @@ abstract class SingleModel {
 	/**
 	 * Trim excerpt
 	 *
-	 * @param string
+	 * @param  string
 	 *
 	 * @return string
 	 */
@@ -179,7 +181,7 @@ abstract class SingleModel {
 	 * Get a short 15 word excerpt
 	 *
 	 * @param $post_excerpt
-	 * @param int $length
+	 * @param  int  $length
 	 *
 	 * @return string
 	 */
@@ -192,8 +194,8 @@ abstract class SingleModel {
 	 * Get next and previous posts
 	 *
 	 * @param $queried_post
-	 * @param bool $previous_post
-	 * @param bool $next_post
+	 * @param  bool  $previous_post
+	 * @param  bool  $next_post
 	 *
 	 * @return \stdClass
 	 */
@@ -220,9 +222,9 @@ abstract class SingleModel {
 		return $adjacent_posts;
 	}
 
-	public function get_image_tag( $size_name = '', $alt = '', $attr = array() ) {
+	public function get_image_tag( $size_name = '', $alt = '', $attr = array(), $default_url = '' ) {
 		$html = "";
-		if ( ! empty( $this->featured_image ) && $this->featured_image instanceof ImageModel ) {
+		if ( ! empty( $this->featured_image->url ) && $this->featured_image instanceof ImageModel ) {
 
 			if ( ! empty( $size_name ) && ! empty( $this->featured_image->sizes->{$size_name} ) ) {
 				$url = $this->featured_image->sizes->{$size_name};
@@ -232,22 +234,24 @@ abstract class SingleModel {
 				$url = '';
 			}
 
-			if ( ! empty( $url ) ) {
-				$alt = empty( $alt ) ?
-					"alt='{$this->featured_image->metadata->alt}'" : "alt='$alt'";
+			$alt = empty( $alt ) ?
+				"alt='{$this->featured_image->metadata->alt}'" : "alt='$alt'";
 
-				$others = '';
-				if ( ! empty( $attr ) ) {
-					foreach ( $attr as $k => $val ) {
-						$val    = str_replace( '%url%', $url, $val );
-						$val    = str_replace( '%url-full%', $this->featured_image->url, $val );
-						$others .= " $k='$val'";
-					}
+		} elseif ( ! empty( $default_url ) ) {
+			$url = $default_url;
+
+			$alt = "alt='$alt'";
+		}
+
+		if ( ! empty( $url ) ) {
+			$others = '';
+			if ( ! empty( $attr ) ) {
+				foreach ( $attr as $k => $val ) {
+					$others .= " $k='$val'";
 				}
-
-				$html = "<img src='{$url}' $alt $others />";
-
 			}
+
+			$html = "<img src='{$url}' $alt $others />";
 		}
 
 		return $html;

@@ -4,7 +4,7 @@ namespace Octopus\Settings\Script;
 
 use Octopus\Base;
 
-class ScriptControl extends Base {
+class ScriptService extends Base {
 
 	protected $enqueued_scripts = [];
 	protected $enqueued_styles = [];

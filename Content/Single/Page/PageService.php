@@ -4,7 +4,7 @@ namespace Octopus\Content\Single\Page;
 
 use Octopus\Content\Single\SingleService;
 use Octopus\Settings\Cache\CacheService;
-use Octopus\Helpers;
+use Octopus\Helper;
 
 class PageService extends SingleService {
 	const CLASS_NAME = 'page';
@@ -42,7 +42,7 @@ class PageService extends SingleService {
 
 		if ( ! empty( $pages ) ) {
 			$page            = reset( $pages );
-			$page->permalink = Helpers::get_post_permalink( $page );
+			$page->permalink = Helper::get_post_permalink( $page );
 
 			if ( $cache && $page !== false ) {
 				CacheService::wp_set( $args, $page );

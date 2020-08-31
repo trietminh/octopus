@@ -1,6 +1,6 @@
 <?php
 
-namespace Octopus\Settings\Sidebar;
+namespace Octopus\Includes\Sidebar;
 
 use Octopus\Base;
 

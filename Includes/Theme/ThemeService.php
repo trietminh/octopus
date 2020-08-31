@@ -1,6 +1,6 @@
 <?php
 
-namespace Octopus\Settings\Theme;
+namespace Octopus\Includes\Theme;
 
 use Octopus\Base;
 
@@ -253,6 +253,14 @@ class ThemeService extends Base {
 	function set_content_width( $width = 1100 ) {
 		add_action( 'after_setup_theme', function () use ( $width ) {
 			$GLOBALS['content_width'] = apply_filters( 'octp_filter_set_content_width', 1100 );
+		} );
+
+		return $this;
+	}
+
+	function limit_upload_size( $limit_in_mb ) {
+		add_filter( 'upload_size_limit', function () use ( $limit_in_mb ) {
+			return $limit_in_mb * 1024 * 1024;
 		} );
 
 		return $this;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Octopus\Settings\Menu;
+namespace Octopus\Includes\Menu;
 
 use Octopus\Base;
 
@@ -92,17 +92,21 @@ class MenuService extends Base {
 		return $menu_obj;
 	}
 
-	function change_sub_menu_class( $parent_class = '', $submenu_class = '' ) {
-		add_filter( 'wp_nav_menu', function ( $menu ) use ( $parent_class, $submenu_class ) {
-			if ( ! empty( $parent_class ) ) {
-				$menu = preg_replace( '/menu-item-has-children/', $parent_class, $menu );
-			}
-			if ( ! empty( $submenu_class ) ) {
-				$menu = preg_replace( '/ class="sub-menu"/', ' class="' . $submenu_class . '"', $menu );
+	function change_sub_menu_class( $parent_class = '', $submenu_class = '', $menu_locations = [] ) {
+		add_filter( 'wp_nav_menu', function ( $menu, $args ) use ( $parent_class, $submenu_class, $menu_locations ) {
+
+			if ( empty( $menu_locations ) || in_array( $args->menu, $menu_locations ) ) {
+
+				if ( ! empty( $parent_class ) ) {
+					$menu = preg_replace( '/menu-item-has-children/', $parent_class, $menu );
+				}
+				if ( ! empty( $submenu_class ) ) {
+					$menu = preg_replace( '/ class="sub-menu"/', ' class="' . $submenu_class . '"', $menu );
+				}
 			}
 
 			return $menu;
-		} );
+		}, 10, 2 );
 
 		return $this;
 	}

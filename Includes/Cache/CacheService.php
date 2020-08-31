@@ -1,6 +1,6 @@
 <?php
 
-namespace Octopus\Settings\Cache;
+namespace Octopus\Includes\Cache;
 
 use Octopus\Base;
 

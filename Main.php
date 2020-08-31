@@ -16,8 +16,55 @@ class Main {
 	}
 
 	public static function install_plugin() {
-		// self::runInstall();
+
+		if ( ! is_blog_installed() ) {
+			return;
+		}
+
+		// Check if we are not already running this routine.
+		if ( 'yes' === get_transient( 'octopus_framework_installing' ) ) {
+			return;
+		}
+
+		// If we made it till here nothing is running yet, lets set the transient now.
+		set_transient( 'octopus_framework_installing', 'yes', MINUTE_IN_SECONDS * 10 );
+
+		if ( ! defined( 'OCTOPUS_FW_INSTALLING' ) ) {
+			define( 'OCTOPUS_FW_INSTALLING', true );
+		}
+
+		// install
+		self::create_tables();
+
+		delete_transient( 'octopus_framework_installing' );
 		update_option( 'octopus_framework_activated', 1 );
+	}
+
+	public static function create_tables() {
+		global $wpdb;
+
+		$wpdb->hide_errors();
+
+		$collate = '';
+
+		if ( $wpdb->has_cap( 'collation' ) ) {
+			$collate = $wpdb->get_charset_collate();
+		}
+
+		require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+
+		$sql = "
+				CREATE TABLE {$wpdb->prefix}otp_sessions (
+				  session_id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+				  session_key char(32) NOT NULL,
+				  session_value longtext NOT NULL,
+				  session_expiry BIGINT UNSIGNED NOT NULL,
+				  PRIMARY KEY  (session_key),
+				  UNIQUE KEY session_id (session_id)
+				) $collate;
+						";
+
+		dbDelta( $sql );
 	}
 
 	public static function uninstall_plugin() {
@@ -25,8 +72,8 @@ class Main {
 	}
 
 	public static function install_actions() {
-		register_activation_hook( OCTOPUS_FW_FCPATH, 'Octopus::install_plugin' );
-		register_deactivation_hook( OCTOPUS_FW_FCPATH, 'Octopus::uninstall_plugin' );
+		register_activation_hook( OCTOPUS_FW_FCPATH, 'Octopus\Main::install_plugin' );
+		register_deactivation_hook( OCTOPUS_FW_FCPATH, 'Octopus\Main::uninstall_plugin' );
 
 		// add actions
 		add_action( 'init', 'Octopus\Main::init', 10 );
@@ -35,9 +82,9 @@ class Main {
 		// add filter
 	}
 
-
 	public static function init() {
 		// Initial functions here
+		do_action( 'octopus_init' );
 	}
 
 	public static function plugins_loaded() {
@@ -90,7 +137,8 @@ class Main {
 			return;
 		}
 		$relative_class = substr( $class_name, $len );
-		$file           = $theme_dir . self::$settings['slug'] . DIRECTORY_SEPARATOR . str_replace( '\\', DIRECTORY_SEPARATOR, $relative_class ) . '.php';
+		$file           = $theme_dir . self::$settings['slug'] . DIRECTORY_SEPARATOR . str_replace( '\\',
+				DIRECTORY_SEPARATOR, $relative_class ) . '.php';
 
 		// if the file exists, require it
 		if ( file_exists( $file ) ) {
@@ -110,7 +158,8 @@ class Main {
 			return;
 		}
 		$relative_class = substr( $class_name, $len );
-		$file           = $theme_dir . self::$settings['slug'] . DIRECTORY_SEPARATOR . str_replace( '\\', DIRECTORY_SEPARATOR, $relative_class ) . '.php';
+		$file           = $theme_dir . self::$settings['slug'] . DIRECTORY_SEPARATOR . str_replace( '\\',
+				DIRECTORY_SEPARATOR, $relative_class ) . '.php';
 		// if the file exists, require it
 		if ( file_exists( $file ) ) {
 			require $file;

@@ -3,7 +3,7 @@
 namespace Octopus\Content\Single\Page;
 
 use Octopus\Content\Single\SingleService;
-use Octopus\Settings\Cache\CacheService;
+use Octopus\Includes\Cache\CacheService;
 use Octopus\Helper;
 
 class PageService extends SingleService {

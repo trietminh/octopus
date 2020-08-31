@@ -3,7 +3,7 @@
 namespace Octopus\Content\Taxonomy;
 
 use Octopus\Base;
-use Octopus\Settings\Cache\CacheService;
+use Octopus\Includes\Cache\CacheService;
 
 abstract class TaxonomyService extends Base {
 	const CLASS_NAME = '';

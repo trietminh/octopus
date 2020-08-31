@@ -109,8 +109,8 @@ abstract class SingleModel {
 			// Apply Filters
 			$this->display_content = apply_filters( 'the_content', $this->post_content );
 
-			$this->display_excerpt = $this->get_excerpt( $this->post_excerpt, $this->post_content,
-				$post_args['number_excerpt'] );
+//			$this->display_excerpt = $this->get_excerpt( $this->post_excerpt, $this->post_content,
+//				$post_args['number_excerpt'] );
 
 			// Get HTML Title
 			$this->esc_title = esc_attr( $this->post_title );
@@ -124,10 +124,10 @@ abstract class SingleModel {
 			}
 
 			// Get Featured Image
-			if ( $post_args['image'] ) {
-				$this->featured_image = new ImageModel( $this->ID, false,
-					( isset( $this->image_size ) ) ? $this->image_size : false );
-			}
+//			if ( $post_args['image'] ) {
+//				$this->featured_image = new ImageModel( $this->ID, false,
+//					( isset( $this->image_size ) ) ? $this->image_size : false );
+//			}
 
 			// Get adjacent posts
 			if ( $post_args['adjacent'] ) {
@@ -159,6 +159,14 @@ abstract class SingleModel {
 		}
 
 		return $fields;
+	}
+
+	public function update_field( $selector, $value ) {
+		if ( function_exists( 'update_field' ) ) {
+			return update_field( $selector, $value, $this->ID );
+		}
+
+		return false;
 	}
 
 	/**
@@ -223,7 +231,9 @@ abstract class SingleModel {
 	}
 
 	public function get_image_tag( $size_name = '', $alt = '', $attr = array(), $default_url = '' ) {
-		$html = "";
+		$html                 = "";
+		$this->featured_image = new ImageModel( $this->ID, false,
+			( isset( $this->image_size ) ) ? $this->image_size : false );
 		if ( ! empty( $this->featured_image->url ) && $this->featured_image instanceof ImageModel ) {
 
 			if ( ! empty( $size_name ) && ! empty( $this->featured_image->sizes->{$size_name} ) ) {
